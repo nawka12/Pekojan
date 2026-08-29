@@ -158,6 +158,7 @@ all hands, candidate detection, and live AI evaluations. Off by default.
 
 ## Legal
 
-Mechanics recreation for personal/educational use. Hololive names and oshi marks
-belong to Cover Corp — this project bundles no hololive assets, artwork, or audio;
+This project's code is released under the [MIT License](LICENSE). Mechanics
+recreation for personal/educational use. hololive names and oshi marks belong
+to COVER Corp — this project bundles no hololive assets, artwork, or audio;
 portraits are emoji placeholders and sounds are synthesized.
