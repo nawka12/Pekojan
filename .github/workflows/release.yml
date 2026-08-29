@@ -1,0 +1,55 @@
+name: Desktop release
+
+# Builds the desktop binaries for every platform and attaches them to the
+# GitHub release for the tag. macOS has to be built on macOS, which is why this
+# exists — Windows and Linux can also be built locally from Linux via wine.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to build and upload to (e.g. v0.1.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac
+          - os: ubuntu-latest
+            platform: linux
+          - os: windows-latest
+            platform: win
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build ${{ matrix.platform }}
+        run: npm run dist:${{ matrix.platform }}
+
+      - name: Upload to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          tag="${{ inputs.tag || github.ref_name }}"
+          gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --title "$tag" --generate-notes
+          find release -maxdepth 1 -type f \
+            \( -name '*.AppImage' -o -name '*.exe' -o -name '*.dmg' -o -name '*-mac-*.zip' \) \
+            -print -exec gh release upload "$tag" {} --clobber \;

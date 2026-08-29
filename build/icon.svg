@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="night" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#161b28"/>
+      <stop offset="100%" stop-color="#0b0d13"/>
+    </linearGradient>
+    <radialGradient id="felt" cx="50%" cy="58%" r="62%">
+      <stop offset="0%" stop-color="#17382e" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0e241d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f6f0e0"/>
+      <stop offset="100%" stop-color="#e0d5b8"/>
+    </linearGradient>
+    <clipPath id="cA"><rect x="362" y="250" width="300" height="470" rx="36"/></clipPath>
+    <clipPath id="cB"><rect x="362" y="250" width="300" height="470" rx="36"/></clipPath>
+    <clipPath id="cC"><rect x="362" y="250" width="300" height="470" rx="36"/></clipPath>
+  </defs>
+
+  <rect width="1024" height="1024" rx="200" fill="url(#night)"/>
+  <rect width="1024" height="1024" rx="200" fill="url(#felt)"/>
+  <rect x="26" y="26" width="972" height="972" rx="178" fill="none" stroke="#e6b54a" stroke-opacity="0.5" stroke-width="14"/>
+
+  <g transform="rotate(-25 512 880)">
+    <g clip-path="url(#cA)">
+      <rect x="362" y="250" width="300" height="470" fill="url(#paper)"/>
+      <rect x="362" y="250" width="300" height="132" fill="#d95587"/>
+    </g>
+    <rect x="362" y="250" width="300" height="470" rx="36" fill="none" stroke="#221d12" stroke-opacity="0.55" stroke-width="10"/>
+  </g>
+
+  <g transform="rotate(25 512 880)">
+    <g clip-path="url(#cC)">
+      <rect x="362" y="250" width="300" height="470" fill="url(#paper)"/>
+      <rect x="362" y="250" width="300" height="132" fill="#d98a2f"/>
+    </g>
+    <rect x="362" y="250" width="300" height="470" rx="36" fill="none" stroke="#221d12" stroke-opacity="0.55" stroke-width="10"/>
+  </g>
+
+  <g>
+    <g clip-path="url(#cB)">
+      <rect x="362" y="250" width="300" height="470" fill="url(#paper)"/>
+      <rect x="362" y="250" width="300" height="132" fill="#4b93b8"/>
+    </g>
+    <rect x="362" y="250" width="300" height="470" rx="36" fill="none" stroke="#221d12" stroke-opacity="0.6" stroke-width="10"/>
+    <circle cx="512" cy="545" r="92" fill="#ff4d6d"/>
+    <circle cx="512" cy="545" r="92" fill="none" stroke="#c72a48" stroke-width="12"/>
+    <circle cx="512" cy="545" r="34" fill="#e6b54a"/>
+  </g>
+</svg>

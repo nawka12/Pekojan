@@ -1,0 +1,67 @@
+appId: com.nawka12.pekojan
+productName: Pekojan
+copyright: Copyright (c) 2026 nawka12
+
+directories:
+  output: release
+  buildResources: build
+
+# The renderer is a self-contained Vite bundle, so no node_modules ship with it.
+files:
+  - dist/**/*
+  - electron/**/*
+  - package.json
+  - "!node_modules/**/*"
+
+npmRebuild: false
+afterPack: build/afterPack.cjs
+
+win:
+  icon: build/icon.ico
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: portable
+      arch: [x64]
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Pekojan
+  artifactName: ${productName}-${version}-win-x64-setup.${ext}
+
+portable:
+  artifactName: ${productName}-${version}-win-x64-portable.${ext}
+
+linux:
+  icon: build/icon.png
+  category: Game
+  synopsis: Midnight parlor card table
+  description: A four-player card game where completing a hand does not end the round - shout PEKOJAN, score, refill, and keep going.
+  desktop:
+    entry:
+      Name: Pekojan
+      Categories: Game;CardGame;
+  target:
+    - target: AppImage
+      arch: [x64]
+  artifactName: ${productName}-${version}-linux-x86_64.${ext}
+
+mac:
+  icon: build/icon.png
+  category: public.app-category.card-games
+  # Unsigned builds: no notarization. build/afterPack.cjs ad-hoc signs the
+  # bundle afterwards so it will launch on Apple Silicon.
+  identity: null
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+    - target: zip
+      arch: [x64, arm64]
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}
+
+dmg:
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}

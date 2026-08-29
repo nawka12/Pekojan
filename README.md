@@ -9,6 +9,26 @@ you shout **PEKOJAN**, collect points, refill your hand instantly, and keep goin
 
 ![Pekojan gameplay](docs/screenshot.png)
 
+## Download
+
+Prebuilt desktop builds live on the
+[releases page](https://github.com/nawka12/Pekojan/releases/latest):
+
+| Platform | File | Notes |
+|---|---|---|
+| Windows | `Pekojan-<version>-win-x64-setup.exe` | Installer, no admin rights needed |
+| Windows | `Pekojan-<version>-win-x64-portable.exe` | Single file, runs without installing |
+| Linux | `Pekojan-<version>-linux-x86_64.AppImage` | `chmod +x` it, then run |
+| macOS | `Pekojan-<version>-mac-arm64.dmg` | Apple Silicon |
+| macOS | `Pekojan-<version>-mac-x64.dmg` | Intel |
+
+The builds are unsigned. Windows SmartScreen will warn once — *More info →
+Run anyway*. On macOS, clear the download quarantine first:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Pekojan.app
+```
+
 ## Quick start
 
 ```bash
@@ -17,6 +37,22 @@ npm run dev      # play at http://localhost:5173
 npm test         # 55 unit/integration tests
 npm run build    # production bundle in dist/
 ```
+
+## Desktop builds
+
+The desktop app is the same web bundle in an Electron shell (`electron/main.cjs`),
+served over a custom `app://` scheme so it keeps a real origin — ES modules and
+`localStorage` behave exactly as they do in the browser.
+
+```bash
+npm run desktop      # build, then run the Electron shell locally
+npm run dist:linux   # AppImage         -> release/
+npm run dist:win     # NSIS + portable  -> release/  (needs wine on Linux)
+npm run dist:mac     # dmg + zip        -> release/  (macOS only)
+```
+
+Pushing a `v*` tag runs `.github/workflows/release.yml`, which builds all three
+platforms and uploads them to that tag's GitHub release.
 
 ## Game modes
 
