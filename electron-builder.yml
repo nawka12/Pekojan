@@ -41,10 +41,6 @@ linux:
   category: Game
   synopsis: Midnight parlor card table
   description: A four-player card game where completing a hand does not end the round - shout PEKOJAN, score, refill, and keep going.
-  desktop:
-    entry:
-      Name: Pekojan
-      Categories: Game;CardGame;
   target:
     - target: AppImage
       arch: [x64]
