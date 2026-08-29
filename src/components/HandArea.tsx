@@ -261,7 +261,7 @@ export function HandArea({ state, viewer = 0 }: { state: GameState; viewer?: num
   };
 
   return (
-    <div className="relative flex w-full flex-col items-center gap-1.5 px-2 pb-2">
+    <div className="relative flex w-full flex-col items-center gap-1 px-2 pb-2">
       {/* status line */}
       <div className="flex h-7 flex-wrap items-center justify-center gap-2">
         {canDiscard && <p className="label !text-[#e6b54a]">Your turn · discard one card</p>}
@@ -294,7 +294,13 @@ export function HandArea({ state, viewer = 0 }: { state: GameState; viewer?: num
       </div>
 
       {/* hand fan */}
-      <div data-testid="hand-fan" className="flex min-h-[7rem] max-w-full items-end justify-center px-1 pb-1">
+      <div
+        data-testid="hand-fan"
+        className="flex max-w-full items-end justify-center px-1 pb-1 pt-5"
+        /* reserve a md card plus the fan's lift, in card units; the top pad
+           is for the "drawn" badge, which hangs above the card it marks */
+        style={{ minHeight: "calc(112 * var(--cu))" }}
+      >
         <AnimatePresence mode="popLayout">
           {rest.map((card, i) => handCard(card, i, rest.length, false))}
           {drawn && handCard(drawn, rest.length, rest.length + 1, true)}
@@ -302,7 +308,7 @@ export function HandArea({ state, viewer = 0 }: { state: GameState; viewer?: num
       </div>
 
       {/* actions */}
-      <div className="flex h-11 items-center justify-center gap-3">
+      <div className="flex h-10 items-center justify-center gap-3">
         {canDiscard && (
           <button
             disabled={!selected}

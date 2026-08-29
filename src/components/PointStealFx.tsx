@@ -21,12 +21,13 @@ const COIN_STAGGER_S = 0.07;
 const TRAVEL_S = 0.85;
 const LEAD_IN_S = 0.15;
 
-/** Seat anchors as viewport fractions; index is position relative to viewer. */
+/** Seat anchors as viewport fractions; index is position relative to viewer.
+ *  Matches the clockwise table layout in Game.tsx: seat +1 sits on the left. */
 const SEAT_ANCHORS = [
   { x: 0.5, y: 0.88 }, // bottom — the revealed player
-  { x: 0.87, y: 0.46 }, // right
+  { x: 0.13, y: 0.46 }, // left — next clockwise
   { x: 0.5, y: 0.15 }, // top
-  { x: 0.13, y: 0.46 }, // left
+  { x: 0.87, y: 0.46 }, // right
 ] as const;
 
 interface Anchor {

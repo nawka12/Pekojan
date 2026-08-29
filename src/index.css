@@ -46,6 +46,20 @@ body,
   margin: 0;
 }
 
+/*
+ * --cu ("card unit") is the one dial the table scales on. Card art is drawn
+ * in card units, so the whole table shrinks with the viewport height while
+ * every label, score and button keeps its native size — a short 16:9 laptop
+ * loses card size, never legibility. Native size (1cu = 1px) lands at an
+ * 800px-tall viewport; below that the slope is set so the whole table still
+ * clears a 560px-tall viewport, the shortest a 768p laptop realistically has
+ * once browser chrome and a taskbar are out. The width term only binds on
+ * narrow screens, where it keeps a full hand of eight cards inside them.
+ */
+:root {
+  --cu: clamp(0.55px, min(calc(0.1458vh - 0.1667px), calc(0.178vw - 0.07px)), 1.2px);
+}
+
 body {
   background: var(--color-night);
   /* faint room vignette — depth without gradient banners */

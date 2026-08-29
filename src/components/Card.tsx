@@ -34,12 +34,26 @@ export function scatterOf(id: string): number {
   return ((Math.abs(h) % 15) - 7) * 0.9;
 }
 
+/*
+ * Card metrics are in card units, not pixels: --cu shrinks with the viewport
+ * height (see index.css) so a short laptop screen fits the whole table while
+ * the surrounding UI text keeps its native size.
+ */
 const SIZES = {
   xs: { w: 34, h: 48, idx: 13, emoji: 20, name: 0, gen: 0 },
   sm: { w: 50, h: 70, idx: 18, emoji: 30, name: 7, gen: 6 },
   md: { w: 66, h: 96, idx: 24, emoji: 42, name: 8, gen: 7 },
   lg: { w: 82, h: 120, idx: 30, emoji: 54, name: 10, gen: 9 },
 } as const;
+
+/** N card units as a CSS length. */
+const cu = (n: number) => `calc(${n} * var(--cu))`;
+
+/** Pixel size of a card, for layouts that need to reserve the space. */
+export const cardBox = (size: keyof typeof SIZES) => ({
+  width: cu(SIZES[size].w),
+  height: cu(SIZES[size].h),
+});
 
 export interface CardProps {
   card: CardT;
@@ -87,7 +101,7 @@ export function Card({
 
   if (faceDown) {
     return (
-      <div className={`card-back ${className}`} style={{ width: SIZES[size].w, height: SIZES[size].h }}>
+      <div className={`card-back ${className}`} style={cardBox(size)}>
         <div className="grid h-full place-items-center">
           <span className="display text-lg text-[#e6b54a]/70">P</span>
         </div>
@@ -107,7 +121,7 @@ export function Card({
     <span
       className="absolute leading-none"
       style={{
-        fontSize: s.idx * (group.symbol.length > 2 ? 0.62 : group.symbol.length > 1 ? 0.8 : 1),
+        fontSize: cu(s.idx * (group.symbol.length > 2 ? 0.62 : group.symbol.length > 1 ? 0.8 : 1)),
         color: "#fff",
         fontFamily: "Georgia, 'Times New Roman', serif",
         fontStyle: "italic",
@@ -141,8 +155,8 @@ export function Card({
       }}
       className={`card-face relative shrink-0 cursor-pointer overflow-hidden text-left transition-shadow ${className}`}
       style={{
-        width: s.w,
-        height: s.h,
+        width: cu(s.w),
+        height: cu(s.h),
         borderRadius: 8,
         background: `linear-gradient(180deg, ${field.bg} 0%, ${field.deep} 100%)`,
         border: "1px solid rgba(255,255,255,0.55)",
@@ -173,7 +187,7 @@ export function Card({
         <span
           className="absolute right-[4px] top-[3px] max-w-[58%] truncate text-right font-semibold"
           style={{
-            fontSize: s.name,
+            fontSize: cu(s.name),
             color: "#fff",
             textShadow: "0 1px 2px rgba(0,0,0,0.4)",
           }}
@@ -188,10 +202,10 @@ export function Card({
           className="absolute grid place-items-center rounded-full font-bold"
           style={{
             right: 3,
-            top: s.name > 0 ? s.name + 4 : 4,
-            width: s.idx * 0.8,
-            height: s.idx * 0.8,
-            fontSize: s.idx * 0.55,
+            top: cu(s.name > 0 ? s.name + 4 : 4),
+            width: cu(s.idx * 0.8),
+            height: cu(s.idx * 0.8),
+            fontSize: cu(s.idx * 0.55),
             background: "#e6b54a",
             color: "#241b06",
             boxShadow: "0 1px 3px rgba(0,0,0,0.35)",
@@ -213,8 +227,8 @@ export function Card({
             left: "50%",
             top: "47%",
             transform: "translate(-50%, -50%)",
-            width: s.w - 10,
-            height: s.h - 16,
+            width: cu(s.w - 10),
+            height: cu(s.h - 16),
             borderRadius: 5,
           }}
         />
@@ -227,7 +241,7 @@ export function Card({
             transform: "translate(-50%, -50%)",
             // multi-emoji oshi marks (e.g. 🐾🩵) shrink so they stay inside the
             // card; ZWJ joiners/variation selectors are not visible glyphs
-            fontSize:
+            fontSize: cu(
               s.emoji *
               Math.min(
                 1,
@@ -236,7 +250,8 @@ export function Card({
                     1,
                     [...ch.emoji.replace(/\u200D/g, "").replace(/\uFE0F/g, "")].length
                   )
-              ),
+              )
+            ),
             lineHeight: 1,
             filter: "drop-shadow(0 3px 4px rgba(0,0,0,0.35))",
           }}
@@ -250,7 +265,7 @@ export function Card({
         <span
           className="absolute bottom-[3px] left-[4px] font-bold uppercase"
           style={{
-            fontSize: s.gen,
+            fontSize: cu(s.gen),
             color: "#fff",
             letterSpacing: "0.06em",
             textShadow: "0 1px 2px rgba(0,0,0,0.4)",

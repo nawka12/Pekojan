@@ -20,8 +20,11 @@ export function MainMenu() {
   };
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-6 p-4">
-      <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring" }}>
+    // auto margins, not justify-center: they centre the column when it fits and
+    // collapse to 0 when it does not, so a tall menu scrolls instead of losing
+    // its top edge off-screen.
+    <div className="flex h-full flex-col items-center gap-6 overflow-y-auto p-4">
+      <motion.div className="mt-auto" initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring" }}>
         <h1 className="display text-center text-6xl leading-none text-[#f3ecd9] sm:text-7xl"
             style={{ textShadow: "0 0 30px rgba(255,77,109,0.35)" }}>
           PEKOJAN
@@ -130,7 +133,7 @@ export function MainMenu() {
       </div>
 
       {/* quick settings */}
-      <div className="slab flex items-center gap-4 px-4 py-2 text-xs text-[#9aa3b5]">
+      <div className="slab mb-auto flex items-center gap-4 px-4 py-2 text-xs text-[#9aa3b5]">
         <label className="flex items-center gap-2">
           Sound
           <input type="checkbox" checked={audioEnabled} onChange={(e) => useSettings.getState().update({ audioEnabled: e.target.checked })} />

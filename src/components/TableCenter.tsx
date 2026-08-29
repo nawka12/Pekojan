@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import type { Card, CardColor, GameState } from "../game/types";
 import { getCharacter } from "../data/characters";
-import { Card as CardView } from "./Card";
+import { Card as CardView, cardBox } from "./Card";
 
 /*
  * Table center: every indicator is a card graphic, matching the cards in
@@ -27,9 +27,12 @@ export function TableCenter({ state, viewer = 0 }: { state: GameState; viewer?: 
     myHand.find((c) => c.characterId === bonus.id)?.color ?? "orange";
 
   return (
-    <div className="felt flex flex-col items-center gap-3 px-4 py-3 sm:px-8">
+    // One row, not a column: the bonus, the groups and the draw pile sit side
+    // by side so the felt spends the screen's spare width instead of its
+    // scarce height. Each slot wraps on its own when the room runs out.
+    <div className="felt flex w-full flex-wrap items-center justify-center gap-x-5 gap-y-2 px-4 py-2 sm:px-6">
       {/* bonus character — a stamped card, face up */}
-      <div className="flex items-center gap-2">
+      <div className="flex shrink-0 items-center gap-2">
         <motion.div
           animate={{ rotate: [-2.5, 2.5, -2.5] }}
           transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
@@ -59,7 +62,7 @@ export function TableCenter({ state, viewer = 0 }: { state: GameState; viewer?: 
       </div>
 
       {/* active groups — member mini-cards */}
-      <div className="flex max-w-full flex-wrap justify-center gap-2">
+      <div className="flex min-w-0 flex-1 flex-wrap justify-center gap-2">
         {state.groups.map((g) => {
           const complete = g.characterIds.every((id) =>
             myHand.some((c) => c.characterId === id)
@@ -103,13 +106,13 @@ export function TableCenter({ state, viewer = 0 }: { state: GameState; viewer?: 
       </div>
 
       {/* deck — card stack */}
-      <div className="flex items-center gap-2.5">
-        <div className="relative" style={{ width: 44, height: 62 }}>
+      <div className="flex shrink-0 items-center gap-2.5">
+        <div className="relative" style={cardBox("sm")}>
           {[2, 1, 0].map((i) => (
             <div
               key={i}
               className="card-back absolute"
-              style={{ width: 44, height: 62, left: i * 2, top: i * -2 }}
+              style={{ ...cardBox("sm"), left: i * 2, top: i * -2 }}
             />
           ))}
           <motion.span
@@ -122,7 +125,7 @@ export function TableCenter({ state, viewer = 0 }: { state: GameState; viewer?: 
             {state.deck.length}
           </motion.span>
         </div>
-        <p className="label" style={{ color: "rgba(243,236,217,0.6)" }}>
+        <p className="label whitespace-nowrap" style={{ color: "rgba(243,236,217,0.6)" }}>
           draw pile
         </p>
       </div>

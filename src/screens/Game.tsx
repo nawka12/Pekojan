@@ -55,17 +55,32 @@ export function GameScreen() {
 
       {/* Table — seats rotate so the revealed player is always at the bottom;
           every seat stays visible no matter whose hand is shown. */}
-      <div className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col justify-between px-2 sm:px-4" style={{ minHeight: 0 }}>
+      <div
+        className="relative mx-auto my-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between px-2 sm:px-4"
+        /* the table spreads to fill the screen, but only so far: past this the
+           rows would drift apart and leave a hole where the felt should be */
+        style={{ minHeight: 0, maxHeight: "calc(680 * var(--cu))" }}
+      >
         {/* across the table */}
         <div className="flex justify-center">
           <PlayerSeat state={state} player={state.players[(revealedFor + 2) % 4]} />
         </div>
 
-        {/* middle row */}
-        <div className="my-1 flex items-center justify-between gap-2">
-          <PlayerSeat state={state} player={state.players[(revealedFor + 3) % 4]} />
-          <TableCenter state={state} viewer={revealedFor} />
-          <PlayerSeat state={state} player={state.players[(revealedFor + 1) % 4]} />
+        {/* middle row — the side seats are capped so the felt keeps the width
+            it needs to lay the groups out in rows instead of one tall column.
+            Seat order runs clockwise: from the viewer's seat the next player
+            sits on the left (like 6 → 9 on a clock face), then across, then
+            right. */}
+        <div className="my-0.5 flex items-center justify-between gap-3">
+          <div className="w-44 shrink-0 xl:w-56">
+            <PlayerSeat state={state} player={state.players[(revealedFor + 1) % 4]} />
+          </div>
+          <div className="flex min-w-0 flex-1 justify-center">
+            <TableCenter state={state} viewer={revealedFor} />
+          </div>
+          <div className="w-44 shrink-0 xl:w-56">
+            <PlayerSeat state={state} player={state.players[(revealedFor + 3) % 4]} />
+          </div>
         </div>
 
         <HandArea state={state} viewer={revealedFor} />
