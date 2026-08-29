@@ -1,6 +1,6 @@
 # Pekojan — Midnight Parlor Card Table
 
-A fully playable web recreation of the gameplay of "Pekojan" from hololive Dreams,
+A fully playable web recreation of the gameplay of "Pokajan!" from hololive Dreams,
 using the hololive generations roster with original UI and placeholder portraits.
 No proprietary hololive assets, audio, artwork, or code are used or bundled.
 
