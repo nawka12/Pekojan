@@ -13,6 +13,7 @@ import { useGame } from "../store/game";
 export function ClaimDialog({ state }: { state: GameState }) {
   const dispatch = useGame((s) => s.dispatch);
   const claimSeconds = useSettingsSeconds();
+  const classic = useSettings((s) => s.settings.gameMode === "classic");
   const [remaining, setRemaining] = useState(claimSeconds);
 
   // Hot-seat: the first human in the queue owns this dialog; privacy for
@@ -62,7 +63,9 @@ export function ClaimDialog({ state }: { state: GameState }) {
         <div className="slab p-4" style={{ borderColor: "rgba(255,77,109,0.55)" }}>
           <div className="flex items-center justify-between">
             <p className="display text-base text-[#ff4d6d]">PEKOJAN AVAILABLE</p>
-            {/* countdown ring */}
+            {/* countdown ring — freestyle only: classic runs the claim on the
+                claimant's compensation clock (top bar), per declared timings */}
+            {!classic && (
             <div className="relative h-10 w-10">
               <svg viewBox="0 0 36 36" className="h-10 w-10 -rotate-90">
                 <circle cx="18" cy="18" r="15" fill="none" stroke="rgba(255,255,255,.15)" strokeWidth="4" />
@@ -74,6 +77,7 @@ export function ClaimDialog({ state }: { state: GameState }) {
               </svg>
               <span className="counter absolute inset-0 grid place-items-center text-xs">{Math.ceil(remaining)}</span>
             </div>
+            )}
           </div>
 
           <div className="mt-2 flex items-center gap-3">

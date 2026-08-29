@@ -29,12 +29,12 @@ export function ClassicTurnTimer({ state }: { state: GameState }) {
     pending !== null &&
     pending === revealedFor &&
     turnStartedAt !== null &&
-    (state.phase === "DISCARDING" || state.phase === "SELF_PEKOJAN_DECISION");
+    (state.phase === "DISCARDING" ||
+      state.phase === "SELF_PEKOJAN_DECISION" ||
+      state.phase === "DISCARD_CLAIM_WINDOW");
 
   const base =
-    state.phase === "SELF_PEKOJAN_DECISION"
-      ? CLASSIC_TURN_BASE.pekojan
-      : CLASSIC_TURN_BASE.discard;
+    state.phase === "DISCARDING" ? CLASSIC_TURN_BASE.discard : CLASSIC_TURN_BASE.pekojan;
   const pool = compensation[pending ?? 0] ?? 0;
   const budget = base + pool;
 
@@ -65,6 +65,8 @@ export function ClassicTurnTimer({ state }: { state: GameState }) {
     const dispatch = useGame.getState().dispatch;
     if (state.phase === "SELF_PEKOJAN_DECISION") {
       dispatch({ type: "PASS_PEKOJAN", playerId: pending });
+    } else if (state.phase === "DISCARD_CLAIM_WINDOW") {
+      dispatch({ type: "PASS_CLAIM", playerId: pending });
     } else {
       dispatch({
         type: "DISCARD",

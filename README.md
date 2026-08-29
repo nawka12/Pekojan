@@ -67,8 +67,9 @@ npm run build    # production bundle in dist/
   hand), probability-weighted discard EV over a draw horizon, hypergeometric
   opponent-threat inference, and declare-vs-pass expected-value analysis for upgrade
   fishing.
-- Claim window with configurable countdown (main menu, default 6 s) and true
-  double-call racing.
+- Claim window with configurable countdown (main menu, default 6 s, freestyle
+  only) and true double-call racing. In classic the claim decision runs on the
+  claimant's clock (pekojan base + compensation pool) per the timings above.
 - Card availability tracker: tap a discarded card or long-press / right-click a hand
   card for the **3×3 copy grid** — one row per color, one cell per physical copy:
   ✕ = used (Pekojan/discard), bordered = in your hand, open = possibly unseen

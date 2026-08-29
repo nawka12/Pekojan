@@ -94,10 +94,16 @@ export const useGame = create<GameStore>((set, get) => {
       if (nextAwaiting === undefined) return;
       const claimant = s.players[nextAwaiting];
       if (claimant.isHuman) {
-        const secs = useSettings.getState().settings.claimWindowSeconds;
-        claimTimer = setTimeout(() => {
-          get().dispatch({ type: "PASS_CLAIM", playerId: nextAwaiting });
-        }, secs * 1000);
+        // The configurable claim window is a freestyle feature. In classic
+        // mode the claim decision runs on the claimant's clock (pekojan base
+        // + compensation pool, force-passed by ClassicTurnTimer on expiry),
+        // per the declared game-mode timings.
+        if (useSettings.getState().settings.gameMode !== "classic") {
+          const secs = useSettings.getState().settings.claimWindowSeconds;
+          claimTimer = setTimeout(() => {
+            get().dispatch({ type: "PASS_CLAIM", playerId: nextAwaiting });
+          }, secs * 1000);
+        }
         return;
       }
       const decision = aiDecide(s, nextAwaiting);
@@ -200,13 +206,13 @@ export const useGame = create<GameStore>((set, get) => {
           actionPlayerId === actor &&
           (action.type === "DISCARD" ||
             action.type === "DECLARE_PEKOJAN" ||
-            action.type === "PASS_PEKOJAN")
+            action.type === "PASS_PEKOJAN" ||
+            action.type === "CLAIM_DISCARD" ||
+            action.type === "PASS_CLAIM")
         ) {
           const spent = (Date.now() - get().turnStartedAt!) / 1000;
           const base =
-            current.phase === "SELF_PEKOJAN_DECISION"
-              ? CLASSIC_TURN_BASE.pekojan
-              : CLASSIC_TURN_BASE.discard;
+            current.phase === "DISCARDING" ? CLASSIC_TURN_BASE.discard : CLASSIC_TURN_BASE.pekojan;
           const excess = Math.max(0, spent - base);
           if (excess > 0.05) get().consumeCompensation(actor, excess);
         }
@@ -238,10 +244,18 @@ export const useGame = create<GameStore>((set, get) => {
   };
 });
 
-/** The human seat owing a timed decision, if any. */
+/** The human seat owing a timed decision, if any. In classic mode the
+ *  discard-claim decision is a pekojan-turn decision on the claimant's
+ *  clock (README game-mode timings), so it counts here too. */
 function humanDecisionActor(s: GameState): number | null {
-  if (s.phase !== "SELF_PEKOJAN_DECISION" && s.phase !== "DISCARDING") return null;
-  return s.players[s.currentPlayer].isHuman ? s.currentPlayer : null;
+  if (s.phase === "SELF_PEKOJAN_DECISION" || s.phase === "DISCARDING") {
+    return s.players[s.currentPlayer].isHuman ? s.currentPlayer : null;
+  }
+  if (s.phase === "DISCARD_CLAIM_WINDOW") {
+    const claimant = s.awaitingClaims.find((id) => s.players[id].isHuman);
+    return claimant ?? null;
+  }
+  return null;
 }
 
 /** Start the classic turn clock iff the state rests on a human decision. */
