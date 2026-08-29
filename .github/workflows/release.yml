@@ -33,9 +33,12 @@ jobs:
         with:
           ref: ${{ inputs.tag || github.ref }}
 
+      # Node 24 ships npm 11, which is what package-lock.json was authored with.
+      # npm 10 rejects it as out of sync: it tries to install the unmet esbuild
+      # peer of vite-node's nested vite, which npm 11 leaves alone.
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - run: npm ci
