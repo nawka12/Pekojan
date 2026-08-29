@@ -7,6 +7,8 @@ No proprietary hololive assets, audio, artwork, or code are used or bundled.
 Four players. Poker × mahjong energy. Completing a hand does **not** end the round —
 you shout **PEKOJAN**, collect points, refill your hand instantly, and keep going.
 
+![Pekojan gameplay](docs/screenshot.png)
+
 ## Quick start
 
 ```bash
