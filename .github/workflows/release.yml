@@ -43,8 +43,10 @@ jobs:
 
       - run: npm ci
 
+      # --publish never: electron-builder would otherwise try to publish the
+      # artifacts itself because a tag is present. The upload step below does it.
       - name: Build ${{ matrix.platform }}
-        run: npm run dist:${{ matrix.platform }}
+        run: npm run dist:${{ matrix.platform }} -- --publish never
 
       - name: Upload to release
         env:
