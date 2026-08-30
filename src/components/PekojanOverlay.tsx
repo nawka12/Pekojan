@@ -38,13 +38,17 @@ export function PekojanOverlay({ state }: { state: GameState }) {
     <AnimatePresence>
       {visible && recent && (
         <motion.div
-          key={recent.seq}
+          key="pekojan"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.35 } }}
           className="pointer-events-none fixed inset-0 z-40 grid place-items-center bg-black/60"
         >
-          <div className="relative flex flex-col items-center gap-3">
+          {/* keyed by seq: a chained Pekojan remounts the CONTENT (replaying
+              its entrance) while the AnimatePresence child itself stays put —
+              swapping the outer key mid-flight overlaps exit+enter and is the
+              pattern that leaves stuck/broken animation nodes behind */}
+          <div key={recent.seq} className="relative flex flex-col items-center gap-3">
             <motion.div
               initial={{ scale: 0.4, rotate: -6, opacity: 0 }}
               animate={{ scale: 1, rotate: -2, opacity: 1 }}
